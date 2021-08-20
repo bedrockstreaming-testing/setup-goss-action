@@ -1,0 +1,26 @@
+name: 'Setup goss'
+inputs:
+  version:
+    description: 'version of dgoss'
+    required: false
+    default: v0.3.16
+description: Build and test a docker image
+runs:
+  using: "composite"
+  steps:
+    - name: Test Docker
+      run: |
+        mkdir -p $HOME/.local/bin
+        curl -L https://raw.githubusercontent.com/aelsabbahy/goss/master/extras/dgoss/dgoss -o $HOME/.local/bin/dgoss
+        curl -L https://github.com/aelsabbahy/goss/releases/download/${{ inputs.version }}/goss-linux-amd64 -o $HOME/.local/bin/goss
+        chmod +x $HOME/.local/bin/dgoss $HOME/.local/bin/goss
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: Goss is installed
+      run: |
+        ls -hal $HOME/.local/bin/
+        which goss
+        which dgoss
+        which bash
+      shell: bash
